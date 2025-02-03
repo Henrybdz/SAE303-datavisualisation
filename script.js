@@ -785,3 +785,89 @@ function compareRegions(region1, region2) {
 
     return comparisonHTML;
 }
+
+// Classe pour gérer la carte des régions
+class RegionMap {
+    constructor() {
+        this.initMap();
+    }
+
+    initMap() {
+        const franceMap = document.getElementById('france-map');
+        if (!franceMap) {
+            console.error('Élément france-map non trouvé');
+            return;
+        }
+
+        // Attendre que la carte SVG soit chargée
+        franceMap.addEventListener('load', () => {
+            const svgDoc = franceMap.contentDocument;
+            if (!svgDoc) {
+                console.error('Impossible de charger la carte SVG');
+                return;
+            }
+
+            // Ajouter les interactions pour chaque région
+            const regions = svgDoc.querySelectorAll('path');
+            regions.forEach(region => {
+                // Style par défaut
+                region.style.fill = '#333';
+                region.style.transition = 'fill 0.3s ease';
+
+                // Événements de survol
+                region.addEventListener('mouseover', () => {
+                    region.style.fill = '#800020';
+                });
+
+                region.addEventListener('mouseout', () => {
+                    region.style.fill = '#333';
+                });
+
+                // Événement de clic
+                region.addEventListener('click', () => {
+                    const regionName = region.getAttribute('data-name') || region.id;
+                    this.showRegionDetails(regionName);
+                });
+            });
+        });
+    }
+
+    showRegionDetails(regionName) {
+        const regionData = window.roadSecurityData.statistiquesRegionales[regionName];
+        if (!regionData) {
+            console.error('Données non trouvées pour la région:', regionName);
+            return;
+        }
+
+        const detailsContainer = document.getElementById('region-details');
+        if (!detailsContainer) return;
+
+        detailsContainer.innerHTML = `
+            <h3>${regionName}</h3>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-value">${regionData.accidents}</span>
+                    <span class="stat-label">Accidents</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">${regionData.tues}</span>
+                    <span class="stat-label">Décès</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">${regionData.blesses}</span>
+                    <span class="stat-label">Blessés</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">${regionData.tauxAccidents}%</span>
+                    <span class="stat-label">Taux d'accidents</span>
+                </div>
+            </div>
+        `;
+    }
+}
+
+// Initialiser la carte quand le DOM est chargé
+document.addEventListener('DOMContentLoaded', () => {
+    new RegionMap();
+    new RegionComparator(); // Garder l'initialisation du comparateur
+});
