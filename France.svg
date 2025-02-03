@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" 
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     version="1.1"
+     width="596.41547"
+     height="584.5448"
+     viewBox="0 0 596.41547 584.5448">
+
+  <!-- Définition du tooltip -->
+  <defs>
+    <style>
+      .region {
+        fill: #4a4a4a;  /* Couleur gris foncé par défaut */
+        stroke: #000;
+        stroke-width: 1;
+        transition: all 0.3s;
+        cursor: pointer;
+      }
+      .region:hover {
+        fill: #8b0000;  /* Rouge foncé au survol */
+      }
+      .region.active {
+        fill: #8b0000;  /* Rouge foncé quand sélectionné */
+      }
+      
+      #tooltip {
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+      #tooltip rect {
+        fill: white;
+        stroke: #333;
+        stroke-width: 1;
+        rx: 5;
+        ry: 5;
+      }
+      #tooltip text {
+        font-family: Arial, sans-serif;
+        font-size: 12px;
+        fill: #333;
+      }
+    </style>
+  </defs>
+
+  <g id="regions">
+    <!-- Hauts-de-France (fusion Nord-Pas-de-Calais et Picardie) -->
+    <path
+       d="m 305.69497,2.5739281 0.53,3.46 2.41,3.63..."
+       title="Hauts-de-France"
+       id="FR-HDF"
+       class="region"
+       data-name="Hauts-de-France"
+       data-population="6004108"
+       data-capital="Lille" />
+
+    <!-- Grand Est -->
+    <path
+       d="m 424.30497,96.883928 1.53,2.11 0.72,4.450002..."
+       title="Grand Est"
+       id="FR-GES"
+       class="region"
+       data-name="Grand Est"
+       data-population="5549586"
+       data-capital="Strasbourg" />
+
+    <!-- Île-de-France -->
+    <path
+       d="m 270.07497,120.40393 1.5,0.48 -0.52,1.86..."
+       title="Île-de-France"
+       id="FR-IDF"
+       class="region"
+       data-name="Île-de-France"
+       data-population="12278210"
+       data-capital="Paris" />
+
+    <!-- Normandie (fusion Haute et Basse-Normandie) -->
+    <path
+       d="m 119.06497,88.843928 1.98,1.33 1.46,-0.76..."
+       title="Normandie"
+       id="FR-NOR"
+       class="region"
+       data-name="Normandie"
+       data-population="3322757"
+       data-capital="Rouen" />
+
+    <!-- Bretagne -->
+    <path
+       d="m 64.514973,235.16393 1.24,1.49 2.52,-0.06..."
+       title="Bretagne"
+       id="FR-BRE"
+       class="region"
+       data-name="Bretagne"
+       data-population="3354854"
+       data-capital="Rennes" />
+
+    <!-- Pays de la Loire -->
+    <path
+       d="m 105.66497,257.03393 1.64,1.15 -0.59,2.05..."
+       title="Pays de la Loire"
+       id="FR-PDL"
+       class="region"
+       data-name="Pays de la Loire"
+       data-population="3801797"
+       data-capital="Nantes" />
+
+    <!-- Centre-Val de Loire -->
+    <path
+       d="m 261.68497,138.79393 2.57,3.15 -0.72,1.27..."
+       title="Centre-Val de Loire"
+       id="FR-CVL"
+       class="region"
+       data-name="Centre-Val de Loire"
+       data-population="2559073"
+       data-capital="Orléans" />
+
+    <!-- Nouvelle-Aquitaine (fusion Aquitaine, Limousin et Poitou-Charentes) -->
+    <path
+       d="m 225.50497,336.11393 0.97,1.29 2.81,-0.43..."
+       title="Nouvelle-Aquitaine"
+       id="FR-NAQ"
+       class="region"
+       data-name="Nouvelle-Aquitaine"
+       data-population="5999982"
+       data-capital="Bordeaux" />
+
+    <!-- Occitanie (fusion Midi-Pyrénées et Languedoc-Roussillon) -->
+    <path
+       d="m 194.75497,475.38393 0.24,0.16 0,0 1.03,2.52..."
+       title="Occitanie"
+       id="FR-OCC"
+       class="region"
+       data-name="Occitanie"
+       data-population="5924858"
+       data-capital="Toulouse" />
+
+    <!-- Auvergne-Rhône-Alpes -->
+    <path
+       d="m 361.22497,302.40393 -0.36,3.68 3.42,0.7..."
+       title="Auvergne-Rhône-Alpes"
+       id="FR-ARA"
+       class="region"
+       data-name="Auvergne-Rhône-Alpes"
+       data-population="8042936"
+       data-capital="Lyon" />
+
+    <!-- Provence-Alpes-Côte d'Azur -->
+    <path
+       d="m 406.53497,411.59393 0.41,0.46 0,0 2.91,1.77..."
+       title="Provence-Alpes-Côte d'Azur"
+       id="FR-PAC"
+       class="region"
+       data-name="Provence-Alpes-Côte d'Azur"
+       data-population="5081101"
+       data-capital="Marseille" />
+
+    <!-- Bourgogne-Franche-Comté -->
+    <path
+       d="m 443.66497,202.06393 2.01,-3.18 1.13,0.57..."
+       title="Bourgogne-Franche-Comté"
+       id="FR-BFC"
+       class="region"
+       data-name="Bourgogne-Franche-Comté"
+       data-population="2785393"
+       data-capital="Dijon" />
+
+    <!-- Corse -->
+    <path
+       d="m 563.65497,571.65393 1.21,-2.68 2.83,-0.29..."
+       title="Corse"
+       id="FR-COR"
+       class="region"
+       data-name="Corse"
+       data-population="338554"
+       data-capital="Ajaccio" />
+  </g>
+
+  <!-- Tooltip -->
+  <g id="tooltip" transform="translate(0,0)">
+    <rect x="0" y="0" width="200" height="80"/>
+    <text id="tooltipTitle" x="10" y="25"></text>
+    <text id="tooltipCapital" x="10" y="45"></text>
+    <text id="tooltipPopulation" x="10" y="65"></text>
+  </g>
+
+  <script type="text/javascript">
+    <![CDATA[
+    // Sélectionner tous les éléments nécessaires
+    const regions = document.querySelectorAll('.region');
+    const tooltip = document.getElementById('tooltip');
+    const tooltipTitle = document.getElementById('tooltipTitle');
+    const tooltipCapital = document.getElementById('tooltipCapital');
+    const tooltipPopulation = document.getElementById('tooltipPopulation');
+
+    // Fonction pour formater le nombre avec des séparateurs de milliers
+    function formatNumber(num) {
+      return new Intl.NumberFormat('fr-FR').format(num);
+    }
+
+    // Gérer les clics sur les régions
+    regions.forEach(region => {
+      region.addEventListener('click', (e) => {
+        // Retirer la classe active de toutes les régions
+        regions.forEach(r => r.classList.remove('active'));
+        
+        // Ajouter la classe active à la région cliquée
+        region.classList.add('active');
+
+        // Récupérer les données de la région
+        const name = region.dataset.name;
+        const capital = region.dataset.capital;
+        const population = formatNumber(region.dataset.population);
+
+        // Mettre à jour le contenu du tooltip
+        tooltipTitle.textContent = name;
+        tooltipCapital.textContent = `Capitale: ${capital}`;
+        tooltipPopulation.textContent = `Population: ${population} hab.`;
+
+        // Calculer la position du tooltip
+        const bbox = region.getBBox();
+        const tooltipX = bbox.x + bbox.width/2 - 100; // Centrer horizontalement
+        const tooltipY = bbox.y + bbox.height/2 - 40; // Centrer verticalement
+
+        // Positionner et afficher le tooltip
+        tooltip.setAttribute('transform', `translate(${tooltipX},${tooltipY})`);
+        tooltip.style.opacity = 1;
+      });
+    });
+
+    // Fermer le tooltip en cliquant ailleurs sur le SVG
+    document.addEventListener('click', (e) => {
+      if (!e.target.classList.contains('region')) {
+        regions.forEach(r => r.classList.remove('active'));
+        tooltip.style.opacity = 0;
+      }
+    });
+    ]]>
+  </script>
+</svg> 

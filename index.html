@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Impact Mortel des Accidents Automobiles | Étude Statistique</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+</head>
+
+<body>
+    <div class="hex-pattern"></div>
+    <div class="dot-pattern"></div>
+    <div class="line-pattern"></div>
+    <div class="noise-overlay"></div>
+    <div class="particle-background">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <!-- Vous pouvez ajouter plus de particules si vous le souhaitez -->
+    </div>
+
+    <div class="loader">
+        <div class="loader-content">
+            <div class="scene-background">
+                <div class="stars"></div>
+            </div>
+            <div class="road"></div>
+            <div class="car">
+                <div class="wheel wheel-front"></div>
+                <div class="wheel wheel-back"></div>
+            </div>
+            <div class="tree"></div>
+            <div class="crash-effect"></div>
+            <div class="safety-message">La vitesse tue. Levez le pied.</div>
+        </div>
+    </div>
+
+    <nav>
+        <div class="nav-content">
+            <div class="logo">
+                <div class="logo-icon">
+                    <span class="logo-text">SR</span>
+                </div>
+                <h1>SecuRoute</h1>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#statistics">Statistiques</a></li>
+                <li><a href="#prevention">Prévention</a></li>
+                <li><a href="#danger-map">Carte Interactive</a></li>
+            </ul>
+            <div class="burger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="hero-content">
+            <h1 class="main-title">Impact Mortel des Accidents Automobiles</h1>
+            <p class="subtitle">Une analyse détaillée des accidents mortels ou gravement invalidants survenus à bord des
+                véhicules.</p>
+            <div class="key-figures">
+                <div class="figure">
+                    <span class="number" data-value="56102">0</span>
+                    <span class="label">Accidents mortels en 2023</span>
+                </div>
+                <div class="figure">
+                    <span class="number" data-value="100554">0</span>
+                    <span class="label">Données analysées</span>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-indicator"></div>
+    </header>
+
+    <main>
+        <!-- Section carte de France -->
+        <section class="section statistics-section" id="statistics">
+            <div class="container">
+                <h2 class="section-title">Statistiques par Région</h2>
+                <div class="map-container">
+                    <object id="france-map" data="images/france.svg" type="image/svg+xml"></object>
+                </div>
+                <div id="region-details" class="region-details">
+                    <div class="region-placeholder">
+                        Cliquez sur une région pour afficher ses statistiques détaillées
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section avec les onglets -->
+        <div class="prevention-section" id="prevention">
+            <h2 class="compare-title">Comparaison des Statistiques Régionales</h2>
+            <div class="tabs-container" id="comparison">
+                <div class="tabs-header">
+                    <button class="tab-btn active" data-tab="comparison">Comparaison des Régions</button>
+                    <button class="tab-btn" data-tab="weather">Alertes Météo</button>
+                </div>
+                <div class="tab-content active" id="comparison-tab">
+                    <div class="compare-section" id="compare-section">
+                        <div class="compare-controls">
+                            <select class="region-select" id="region1">
+                                <option value="">Sélectionnez une région</option>
+                            </select>
+                            <select class="region-select" id="region2">
+                                <option value="">Sélectionnez une région</option>
+                            </select>
+                            <button id="compare-btn">Comparer</button>
+                        </div>
+                        <div id="comparison-result">
+                            <!-- Le contenu de la comparaison sera ajouté ici -->
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-content" id="weather">
+                    <!-- Contenu de l'onglet météo -->
+                </div>
+            </div>
+        </div>
+
+        <div class="map-section">
+            <h2 class="map-section-title">Carte Interactive des Incidents</h2>
+            <p class="map-section-description">
+                Visualisez en temps réel les accidents, travaux et bouchons sur les routes de France. Utilisez les
+                filtres ci-dessous pour afficher les informations qui vous intéressent.
+            </p>
+            <div class="map-controls">
+                <button class="filter-btn active" data-type="all">Tous</button>
+                <button class="filter-btn" data-type="accidents">Accidents</button>
+                <button class="filter-btn" data-type="travaux">Travaux</button>
+                <button class="filter-btn" data-type="bouchons">Bouchons</button>
+            </div>
+            <div id="danger-map"></div>
+        </div>
+    </main>
+
+    <footer class="site-footer" id="contact">
+        <div class="footer-waves">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+                <path fill="var(--bg-darker)"
+                    d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,112C672,96,768,96,864,112C960,128,1056,160,1152,160C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z">
+                </path>
+            </svg>
+        </div>
+
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <div class="logo-icon">
+                            <span class="logo-text">SR</span>
+                        </div>
+                        <h3>SecuRoute</h3>
+                    </div>
+                    <p class="brand-description">
+                        Ensemble pour une route plus sûre. Découvrez nos analyses et statistiques pour comprendre et
+                        prévenir les accidents de la route.
+                    </p>
+                    <div class="social-links">
+                        <a href="#" class="social-link" aria-label="Facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="social-link" aria-label="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="social-link" aria-label="LinkedIn">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="#" class="social-link" aria-label="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="footer-links">
+                    <div class="footer-section">
+                        <h4>Navigation</h4>
+                        <ul>
+                            <li><a href="#accueil">Accueil</a></li>
+                            <li><a href="#statistiques">Statistiques</a></li>
+                            <li><a href="#marques">Marques</a></li>
+                            <li><a href="#contact">Contact</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-section">
+                        <h4>Ressources</h4>
+                        <ul>
+                            <li><a href="#">Rapports Annuels</a></li>
+                            <li><a href="#">Études de Cas</a></li>
+                            <li><a href="#">Publications</a></li>
+                            <li><a href="#">FAQ</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-section">
+                        <h4>Contact</h4>
+                        <ul class="contact-info">
+                            <li>
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>123 Avenue de la Sécurité<br>75000 Paris, France</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-phone"></i>
+                                <span>+33 1 23 45 67 89</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-envelope"></i>
+                                <span>contact@securoute.fr</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="footer-legal">
+                    <a href="#">Mentions Légales</a>
+                    <a href="#">Politique de Confidentialité</a>
+                    <a href="#">Conditions d'Utilisation</a>
+                </div>
+                <p class="copyright">
+                    © 2024 SecuRoute. Tous droits réservés.
+                </p>
+            </div>
+        </div>
+    </footer>
+    <script src="data.js"></script>
+    <script src="animations.js"></script>
+    <script src="script.js"></script>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+</body>
+
+</html>
