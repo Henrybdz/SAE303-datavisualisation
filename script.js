@@ -332,77 +332,107 @@ const preventionData = {
     }
 };
 
-// Définir la classe RegionComparator
+// Gestion de la comparaison des régions
 class RegionComparator {
     constructor() {
-        this.compareBtn = document.getElementById('compare-btn');
         this.region1Select = document.getElementById('region1');
         this.region2Select = document.getElementById('region2');
-        this.resultContainer = document.getElementById('comparison-result');
+        this.compareBtn = document.getElementById('compare-btn');
+        this.resultDiv = document.getElementById('comparison-result');
         
-        // Attacher l'événement avec la bonne référence à compareRegions
-        this.compareBtn?.addEventListener('click', () => this.compareRegions());
+        this.initSelects();
+        this.bindEvents();
+    }
+
+    initSelects() {
+        // Vider les selects avant d'ajouter les options
+        this.region1Select.innerHTML = '';
+        this.region2Select.innerHTML = '';
+        
+        const regions = Object.keys(window.roadSecurityData.regionalData);
+        regions.forEach(region => {
+            const regionData = window.roadSecurityData.regionalData[region];
+            this.region1Select.add(new Option(regionData.nom, region));
+            this.region2Select.add(new Option(regionData.nom, region));
+        });
+    }
+
+    bindEvents() {
+        this.compareBtn.addEventListener('click', () => {
+            this.resultDiv.innerHTML = '';
+            this.compareRegions();
+        });
     }
 
     compareRegions() {
-        const region1 = this.region1Select.value;
-        const region2 = this.region2Select.value;
-        
-        if (!region1 || !region2) {
-            alert('Veuillez sélectionner deux régions à comparer');
-            return;
-        }
-        
-        const data1 = window.roadSecurityData.statistiquesRegionales[region1];
-        const data2 = window.roadSecurityData.statistiquesRegionales[region2];
-        
-        if (!data1 || !data2) {
-            this.resultContainer.innerHTML = '<p>Données non disponibles pour une ou les deux régions</p>';
-            return;
-        }
+        const r1 = window.roadSecurityData.regionalData[this.region1Select.value];
+        const r2 = window.roadSecurityData.regionalData[this.region2Select.value];
 
-        const comparisonHTML = `
-            <div class="comparison-grid">
-                <div class="comparison-header">
-                    <div class="region-name">${region1}</div>
-                    <div class="metric">Métrique</div>
-                    <div class="region-name">${region2}</div>
+        if (!r1 || !r2) return;
+
+        const html = `
+            <div class="comparison-results">
+                <div class="region-comparison">
+                    <h3>${r1.nom}</h3>
+                    <div class="stat-group">
+                        <h4>Accidents en 2023</h4>
+                        ${r1.statistiquesGenerales.accidents2023}
+                    </div>
+                    <div class="stat-group">
+                        <h4>Décès</h4>
+                        ${r1.statistiquesGenerales.tuesSurPlace}
+                    </div>
+                    <div class="stat-group">
+                        <h4>Blessés hospitalisés</h4>
+                        ${r1.statistiquesGenerales.blessesHospitalises}
+                    </div>
+                    <div class="stat-group">
+                        <h4>Blessés légers</h4>
+                        ${r1.statistiquesGenerales.blessesLegers}
+                    </div>
                 </div>
-                
-                <div class="comparison-row">
-                    <div class="value">${data1.accidents}</div>
-                    <div class="metric">Accidents</div>
-                    <div class="value">${data2.accidents}</div>
-                </div>
-                
-                <div class="comparison-row">
-                    <div class="value">${data1.tues}</div>
-                    <div class="metric">Décès</div>
-                    <div class="value">${data2.tues}</div>
-                </div>
-                
-                <div class="comparison-row">
-                    <div class="value">${data1.blesses}</div>
-                    <div class="metric">Blessés</div>
-                    <div class="value">${data2.blesses}</div>
-                </div>
-                
-                <div class="comparison-row">
-                    <div class="value">${data1.tauxAccidents}%</div>
-                    <div class="metric">Taux d'accidents</div>
-                    <div class="value">${data2.tauxAccidents}%</div>
+                <div class="region-comparison">
+                    <h3>${r2.nom}</h3>
+                    <div class="stat-group">
+                        <h4>Accidents en 2023</h4>
+                        ${r2.statistiquesGenerales.accidents2023}
+                    </div>
+                    <div class="stat-group">
+                        <h4>Décès</h4>
+                        ${r2.statistiquesGenerales.tuesSurPlace}
+                    </div>
+                    <div class="stat-group">
+                        <h4>Blessés hospitalisés</h4>
+                        ${r2.statistiquesGenerales.blessesHospitalises}
+                    </div>
+                    <div class="stat-group">
+                        <h4>Blessés légers</h4>
+                        ${r2.statistiquesGenerales.blessesLegers}
+                    </div>
                 </div>
             </div>
         `;
-        
-        this.resultContainer.innerHTML = comparisonHTML;
+
+        this.resultDiv.innerHTML = html;
+        this.animateComparison();
+    }
+
+    animateComparison() {
+        gsap.from('.region-comparison', {
+            y: 20,
+            opacity: 0,
+            duration: 0.5,
+            stagger: 0.2,
+            ease: "power2.out"
+        });
     }
 }
 
-// Initialiser le comparateur quand le DOM est chargé
-document.addEventListener('DOMContentLoaded', () => {
-    new RegionComparator();
-});
+// S'assurer que l'instance est unique
+if (window.regionComparator) {
+    delete window.regionComparator;
+}
+window.regionComparator = new RegionComparator();
 
 // Gestion de la carte interactive
 class DangerMap {
@@ -712,20 +742,6 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById(tabId).classList.add('active');
         });
     });
-
-    // Gestionnaire du bouton de comparaison
-    document.getElementById('compare-btn')?.addEventListener('click', () => {
-        const region1 = document.getElementById('region1').value;
-        const region2 = document.getElementById('region2').value;
-        
-        if (!region1 || !region2) {
-            alert('Veuillez sélectionner deux régions à comparer');
-            return;
-        }
-        
-        const comparisonResult = compareRegions(region1, region2);
-        document.getElementById('comparison-result').innerHTML = comparisonResult;
-    });
 });
 
 // Initialisation
@@ -738,136 +754,4 @@ document.addEventListener('DOMContentLoaded', () => {
     new DangerMap();
     new NationalDashboard();
     new NewsManager();
-});
-
-// Fonction de comparaison des régions
-function compareRegions(region1, region2) {
-    const data1 = window.roadSecurityData.statistiquesRegionales[region1];
-    const data2 = window.roadSecurityData.statistiquesRegionales[region2];
-    
-    if (!data1 || !data2) {
-        return '<p>Données non disponibles pour une ou les deux régions</p>';
-    }
-
-    let comparisonHTML = `
-        <div class="comparison-grid">
-            <div class="comparison-header">
-                <div class="region-name">${region1}</div>
-                <div class="metric">Métrique</div>
-                <div class="region-name">${region2}</div>
-            </div>
-            
-            <div class="comparison-row">
-                <div class="value">${data1.accidents}</div>
-                <div class="metric">Accidents</div>
-                <div class="value">${data2.accidents}</div>
-            </div>
-            
-            <div class="comparison-row">
-                <div class="value">${data1.tues}</div>
-                <div class="metric">Décès</div>
-                <div class="value">${data2.tues}</div>
-            </div>
-            
-            <div class="comparison-row">
-                <div class="value">${data1.blesses}</div>
-                <div class="metric">Blessés</div>
-                <div class="value">${data2.blesses}</div>
-            </div>
-            
-            <div class="comparison-row">
-                <div class="value">${data1.tauxAccidents}%</div>
-                <div class="metric">Taux d'accidents</div>
-                <div class="value">${data2.tauxAccidents}%</div>
-            </div>
-        </div>
-    `;
-
-    return comparisonHTML;
-}
-
-// Classe pour gérer la carte des régions
-class RegionMap {
-    constructor() {
-        this.initMap();
-    }
-
-    initMap() {
-        const franceMap = document.getElementById('france-map');
-        if (!franceMap) {
-            console.error('Élément france-map non trouvé');
-            return;
-        }
-
-        // Attendre que la carte SVG soit chargée
-        franceMap.addEventListener('load', () => {
-            const svgDoc = franceMap.contentDocument;
-            if (!svgDoc) {
-                console.error('Impossible de charger la carte SVG');
-                return;
-            }
-
-            // Ajouter les interactions pour chaque région
-            const regions = svgDoc.querySelectorAll('path');
-            regions.forEach(region => {
-                // Style par défaut
-                region.style.fill = '#333';
-                region.style.transition = 'fill 0.3s ease';
-
-                // Événements de survol
-                region.addEventListener('mouseover', () => {
-                    region.style.fill = '#800020';
-                });
-
-                region.addEventListener('mouseout', () => {
-                    region.style.fill = '#333';
-                });
-
-                // Événement de clic
-                region.addEventListener('click', () => {
-                    const regionName = region.getAttribute('data-name') || region.id;
-                    this.showRegionDetails(regionName);
-                });
-            });
-        });
-    }
-
-    showRegionDetails(regionName) {
-        const regionData = window.roadSecurityData.statistiquesRegionales[regionName];
-        if (!regionData) {
-            console.error('Données non trouvées pour la région:', regionName);
-            return;
-        }
-
-        const detailsContainer = document.getElementById('region-details');
-        if (!detailsContainer) return;
-
-        detailsContainer.innerHTML = `
-            <h3>${regionName}</h3>
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <span class="stat-value">${regionData.accidents}</span>
-                    <span class="stat-label">Accidents</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-value">${regionData.tues}</span>
-                    <span class="stat-label">Décès</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-value">${regionData.blesses}</span>
-                    <span class="stat-label">Blessés</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-value">${regionData.tauxAccidents}%</span>
-                    <span class="stat-label">Taux d'accidents</span>
-                </div>
-            </div>
-        `;
-    }
-}
-
-// Initialiser la carte quand le DOM est chargé
-document.addEventListener('DOMContentLoaded', () => {
-    new RegionMap();
-    new RegionComparator(); // Garder l'initialisation du comparateur
-});
+}); 
